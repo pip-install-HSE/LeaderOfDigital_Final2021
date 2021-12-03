@@ -1,0 +1,4 @@
+python-dotenv==0.19.2
+psycopg2-binary
+SQLAlchemy==1.4.27
+GeoAlchemy2==0.9.4

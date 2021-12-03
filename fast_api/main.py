@@ -27,16 +27,6 @@ def read_item(item_id: int):
     return {"item_id": item_id}
 
 
-# def huy(name, geometry):
-#     return {
-#         "id": 1,
-#         "geometry": geometry,
-#         "name": name,
-#         "tags": {"Организация": "ООО Газпром"},
-#         "padding": 10
-#     }
-
-
 @app.get("/search/")
 def read_item(object_name: str):
     # objects = ['Завод имени Чкалова', 'Завод имени Петрова', 'Трубопровод Петечкина']
@@ -66,7 +56,9 @@ def read_item(object_name: str):
 def read_item(object_id: int):
     with open('us-states.geojson.txt', 'r') as file:
         geojson = json.loads(file.read())
-    return geojson['features'][object_id]
+    geojson['features'] = [geojson['features'][object_id]]
+    print(geojson)
+    return geojson
 
 
 @app.get("/objects_near/")
