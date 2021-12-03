@@ -1,13 +1,15 @@
 from typing import List
-
+import logging
 from fastapi import FastAPI, HTTPException
 from models import Objects, Object_Pydantic, Task_Pydantic, Tasks, Tags, Tag_Pydantic
 from pydantic import BaseModel
 from decouple import config
 from starlette.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
+from shapely.geometry import shape
 
-app = FastAPI(title="Tortoise ORM FastAPI example")
+logger = logging.getLogger(__name__)
+app = FastAPI(title="Tortoise ORM FastAPI example", debug=True)
 
 app.add_middleware(
     CORSMiddleware,
@@ -34,6 +36,17 @@ async def create_user(user: Object_Pydantic):
     return await Object_Pydantic.from_tortoise_orm(user_obj)
 
 
+@app.post("/inspect_objects")
+async def inspect_objects(big_geometry, response_model=List[Object_Pydantic]):
+    # big_geometry = shape(big_geometry)
+    query = f"SELECT id, geometry, name, padding FROM objects WHERE ST_Intersects(ST_GeomFromGeoJSON(geometry), '{big_geometry}'::geography::geometry)"
+    # print(query)
+    objects = await Objects.raw(query)
+    print(objects, [o.id for o in objects])
+    # print(objects)
+    return await Object_Pydantic.from_queryset(Objects.filter(id__in=[o.id for o in objects]))
+
+
 @app.get(
     "/object/", response_model=Object_Pydantic, responses={404: {"model": HTTPNotFoundError}}
 )
@@ -57,6 +70,7 @@ async def delete_user(object_id: int):
     return Status(message=f"Deleted object {object_id}")
 
 # print(f"postgres://{config('POSTGRES_USER')}:{config('POSTGRES_PASSWORD')}@{config('POSTGRES_HOST')}:{config('POSTGRES_PORT')}/{config('POSTGRES_DB')}")
+
 
 TORTOISE_ORM = {
     "connections": {"default": f"postgres://{config('POSTGRES_USER')}:{config('POSTGRES_PASSWORD')}@{config('POSTGRES_HOST')}:{config('POSTGRES_PORT')}/{config('POSTGRES_DB')}"},
