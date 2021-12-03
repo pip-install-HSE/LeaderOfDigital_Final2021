@@ -37,7 +37,7 @@ async def create_user(user: Object_Pydantic):
 
 
 @app.post("/inspect_objects")
-async def inspect_objects(big_geometry, response_model=List[Object_Pydantic]):
+async def inspect_objects(big_geometry):
     # big_geometry = shape(big_geometry)
     query = f"SELECT id, geometry, name, padding FROM objects WHERE ST_Intersects(ST_GeomFromGeoJSON(geometry), '{big_geometry}'::geography::geometry)"
     # print(query)
