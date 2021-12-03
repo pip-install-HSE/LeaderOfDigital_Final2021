@@ -25,6 +25,7 @@ class Tags(models.Model):
     value = fields.CharField(max_length=100)
 
 
+class Objects(models.Model):
     id = fields.IntField(pk=True)
     geometry = MyGeometryField()
     name = fields.CharField(max_length=200, unique=True)
