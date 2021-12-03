@@ -129,6 +129,10 @@ class SatelliteObserver:
         objects = self.get_from_api(wkt)
         pass
         for obj in objects:
+            print(type(obj))
+            print(obj)
+            exit()
+            continue
             obj = self.from_obj_to_buffer(obj['poly'], obj['buffer'])
             # obj_geom = Geometry(geometry=p, crs=CRS.WGS84)
             obj_size = bbox_to_dimensions(obj.bounds, resolution=1)
@@ -144,6 +148,7 @@ class SatelliteObserver:
                         'obj': obj.id}
 
                 app.send_task('classify', args={data, })
+        exit()
 
 
 
