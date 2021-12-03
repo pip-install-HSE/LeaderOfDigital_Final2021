@@ -1,8 +1,13 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-import json
+from typing import List
 
-app = FastAPI()
+from fastapi import FastAPI, HTTPException
+from models import Objects, Object_Pydantic, Task_Pydantic, Tasks, Tags, Tag_Pydantic
+from pydantic import BaseModel
+from decouple import config
+from starlette.middleware.cors import CORSMiddleware
+from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
+
+app = FastAPI(title="Tortoise ORM FastAPI example")
 
 app.add_middleware(
     CORSMiddleware,
@@ -13,55 +18,63 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def read_root():
-    file = open('us-states.geojson.txt', 'r')
-    geojson = json.loads(file.read())
-    file.close()
-
-    return geojson
+class Status(BaseModel):
+    message: str
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int):
-    return {"item_id": item_id}
+@app.get("/objects", response_model=List[Object_Pydantic])
+async def get_objects():
+    return await Object_Pydantic.from_queryset(Objects.all())
 
 
-@app.get("/search/")
-def read_item(object_name: str):
-    # objects = ['Завод имени Чкалова', 'Завод имени Петрова', 'Трубопровод Петечкина']
-    with open('us-states.geojson.txt', 'r') as file:
-        geojson = json.loads(file.read())
-    features = geojson['features']
-    objects = [(feature['properties']['name'], i) for i, feature in enumerate(features)]
-    result = []
-    filtered_geojson = geojson
-    filtered_geojson['features'] = []
-    for name, i in objects:
-        if name.lower() in object_name.lower() or object_name.lower() in name.lower():
-            filtered_geojson['features'].append(features[i])
-            result.append({
-                "id": i,
-                # "geometry": features[i]['geometry'],
-                "name": name,
-                "tags": {"Организация": "ООО Газпром"},
-                "padding": 10
-            })
-
-    print(len(result))
-    return result, filtered_geojson
+@app.post("/objects", response_model=Object_Pydantic)
+async def create_user(user: Object_Pydantic):
+    print(user.dict(exclude_unset=True))
+    user_obj = await Objects.create(**user.dict(exclude_unset=True))
+    return await Object_Pydantic.from_tortoise_orm(user_obj)
 
 
-@app.get("/get_object/")
-def read_item(object_id: int):
-    with open('us-states.geojson.txt', 'r') as file:
-        geojson = json.loads(file.read())
-    geojson['features'] = [geojson['features'][object_id]]
-    print(geojson)
-    return geojson
+@app.get(
+    "/object/", response_model=Object_Pydantic, responses={404: {"model": HTTPNotFoundError}}
+)
+async def get_user(user_id: int):
+    return await Object_Pydantic.from_queryset_single(Objects.get(id=user_id))
 
 
-@app.get("/objects_near/")
-def read_item(polygon: str):
-    # делаем запрос к бд, возвращаем рядом которые с учетом паддингов
-    return None
+@app.put(
+    "/object/", response_model=Object_Pydantic, responses={404: {"model": HTTPNotFoundError}}
+)
+async def update_user(object_id: int, user: Object_Pydantic):
+    await Objects.filter(id=object_id).update(**user.dict(exclude_unset=True))
+    return await Object_Pydantic.from_queryset_single(Objects.get(id=user_id))
+
+
+@app.delete("/object/", response_model=Status, responses={404: {"model": HTTPNotFoundError}})
+async def delete_user(object_id: int):
+    deleted_count = await Objects.filter(id=object_id).delete()
+    if not deleted_count:
+        raise HTTPException(status_code=404, detail=f"Object {object_id} not found")
+    return Status(message=f"Deleted object {object_id}")
+
+# print(f"postgres://{config('POSTGRES_USER')}:{config('POSTGRES_PASSWORD')}@{config('POSTGRES_HOST')}:{config('POSTGRES_PORT')}/{config('POSTGRES_DB')}")
+
+TORTOISE_ORM = {
+    "connections": {"default": f"postgres://{config('POSTGRES_USER')}:{config('POSTGRES_PASSWORD')}@{config('POSTGRES_HOST')}:{config('POSTGRES_PORT')}/{config('POSTGRES_DB')}"},
+    "apps": {
+        "models": {
+            "models": ["models"],
+            "default_connection": "default",
+        },
+    },
+}
+
+
+register_tortoise(
+    app,
+    # db_url=f"postgres://{config('POSTGRES_USER')}:{config('POSTGRES_PASSWORD')}@{config('POSTGRES_HOST')}:{config('POSTGRES_PORT')}/{config('POSTGRES_DB')}",
+    config=TORTOISE_ORM,
+    # modules={"models": ["models"]},
+    generate_schemas=True,
+    add_exception_handlers=True,
+)
+

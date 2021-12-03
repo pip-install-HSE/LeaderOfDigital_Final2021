@@ -1,0 +1,39 @@
+version: "3.3"
+
+services:
+  db:
+    container_name: db
+    image: kartoza/postgis
+    ports:
+      - "5432:5432"
+    env_file:
+      - "./.env"
+    networks:
+      main:
+    volumes:
+      - ./data:/var/lib/postgresql/data/
+    restart: always
+
+  api:
+    build: fast_api
+    ports:
+      - "8080:8080"
+    env_file:
+      - "./.env"
+    networks:
+      main:
+    volumes:
+      - ./fast_api:/app
+    restart: always
+
+  redis:
+    container_name: redis
+    image: "redis:alpine"
+    networks:
+      main:
+    volumes:
+      - ./storage/redis/data:/data
+    restart: always
+
+networks:
+  main:

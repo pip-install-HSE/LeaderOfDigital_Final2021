@@ -1,3 +1,6 @@
 fastapi==0.70.0
 uvicorn==0.15.0
 GeoAlchemy2==0.9.4
+tortoise-orm[asyncpg]
+python-decouple
+shapely
