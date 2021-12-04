@@ -8,7 +8,7 @@ class MyGeometryField(GeometryField, fields.JSONField):
 
 
 class Tasks(models.Model):
-    id = fields.IntField(pk=True)
+    id = fields.IntField(pk=True, index=True)
     geometry = MyGeometryField()
     data_datetime = fields.DatetimeField()
     object_id = fields.IntField()
@@ -18,7 +18,7 @@ class Tasks(models.Model):
 
 
 class Tags(models.Model):
-    id = fields.IntField(pk=True)
+    id = fields.IntField(pk=True, index=True)
     object_id = fields.IntField()
     # object = fields.ForeignKeyField("models.Objects", related_name="tags")
     key = fields.CharField(max_length=100)
@@ -26,7 +26,7 @@ class Tags(models.Model):
 
 
 class Objects(models.Model):
-    id = fields.IntField(pk=True)
+    id = fields.IntField(pk=True, index=True)
     geometry = MyGeometryField()
     name = fields.CharField(max_length=200, unique=True)
     padding = fields.FloatField()

@@ -7,4 +7,4 @@ from models import Tasks
 
 Task_Pydantic = pydantic_model_creator(Tasks, name="Task")
 TaskIn_Pydantic = pydantic_model_creator(
-    Tasks, name='TaskIn', exclude_readonly=True)
+    Tasks, name='TaskIn', exclude_readonly=True, exclude=('id', ))

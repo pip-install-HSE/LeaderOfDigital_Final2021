@@ -7,4 +7,4 @@ from models import Objects
 
 Object_Pydantic = pydantic_model_creator(Objects, name="Object")
 ObjectIn_Pydantic = pydantic_model_creator(
-    Objects, name='ObjectIn', exclude_readonly=True)
+    Objects, name='ObjectIn', exclude_readonly=True, exclude=('id', ))

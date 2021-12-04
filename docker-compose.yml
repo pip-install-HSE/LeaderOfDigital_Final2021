@@ -28,12 +28,31 @@ services:
 
   redis:
     container_name: redis
+    ports:
+      - "6379:6379"
     image: "redis:alpine"
     networks:
       main:
     volumes:
       - ./storage/redis/data:/data
     restart: always
+
+  flower:
+    image: mher/flower
+    container_name: flower
+    networks:
+      main:
+    environment:
+      CELERY_BROKER_URL: redis://redis/0
+      CELERY_RESULT_BACKEND: redis://redis/0
+    ports:
+      - "5555:5555"
+#  front:
+#    container_name: front
+#    restart: unless-stopped
+#    build: ./front/
+#    ports:
+#      - "3000:81"
 
 networks:
   main:
