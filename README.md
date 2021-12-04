@@ -1,91 +1,66 @@
 <h4>Реализованная функциональность</h4>
 <ul>
-    <li>Функционал 1;</li>
-    <li>Функционал 2;</li>
-    <li>Функционал 3;</li>
+    <li>Получение данных со спутника в режиме реального времени</li>
+    <li>Разбивка данных на квадраты и обработка бинарным классификатором</li>
+    <li>Отображение полученных данных на карте</li>
+    <li>Возможность создания и редактирования объектов для исследования на предмет разлива нефти</li>
 </ul> 
 <h4>Особенность проекта в следующем:</h4>
 <ul>
- <li>Киллерфича-1;</li>
- <li>Киллерфича-2;</li>
- <li>Киллерфича-3;</li>  
+ <li>Модель глубокого обучения</li>
+ <li>За счёт крайне быстрого получения данных возможно пролводить анализ буквально в режиме реального времени</li>
+ <li>Кастомизируемый веб-интерфейс под каждого конкретного заказчика с возможность создания и редактирования потенциально опасных мест(где может произойти разлив)</li>  
  </ul>
 <h4>Основной стек технологий:</h4>
 <ul>
-    <li>LAMP/LEMP/FAMP/FEMP.</li>
-	<li>HTML, CSS, JavaScript, TypeScript.</li>
-	<li>PHP 7, MySQL.</li>
-	<li>Symfony, Laravel, Zend Framework, Yii, Kohana.</li>
-	<li>LESS, SASS, PostCSS.</li>
-	<li>Gulp, Webpack, Babel.</li>
-	<li>БЭМ.</li>
-	<li>React (Next.js), Vue (Nuxt.js), Angular.</li>
-	<li>Git, Mercurial.</li>
-	<li>Jenkins, Gitlab.</li>
+	<li>HTML, CSS, JavaScript, React</li>
+	<li>python 3.7, PostgreSQL</li>
+	<li>FastAPI, Tortoise ORM, </li>
+	<li>Celery+Redis</li>
+	<li>Docker, Docker-compose</li>
+	<li>Pytorch, numpy, pandas</>
   
  </ul>
 <h4>Демо</h4>
-<p>Демо сервиса доступно по адресу: http://demo.test </p>
-<p>Реквизиты тестового пользователя: email: <b>testuser@test.ru</b>, пароль: <b>testuser</b></p>
+<p>Демо сервиса доступно по адресу: http://84.252.74.223:85/</p>
 
 
 
 
 СРЕДА ЗАПУСКА
 ------------
-1) развертывание сервиса производится на debian-like linux (debian 9+);
-2) требуется установленный web-сервер с поддержкой PHP(версия 7.4+) интерпретации (apache, nginx);
-3) требуется установленная СУБД MariaDB (версия 10+);
-4) требуется установленный пакет name1 для работы с...;
+1) Все наши сервисы контейниризированы, нужен docker, docker-compose
+2) Запуск компонентов происходит через команду docker-compose up
+3) Worker: unix-like system, python 3.7, Celery[Redis]
 
 
 УСТАНОВКА
 ------------
-### Установка пакета name
 
 Выполните 
 ~~~
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install name1
-sudo apt-get install mariadb-client mariadb-server
-git clone https://github.com/Sinclear/default_readme
-cd default_readme
+docker-compose up
+	
+Для фронта:
+npm run build
 ...
 ~~~
 ### База данных
 
-Необходимо создать пустую базу данных, а подключение к базе прописать в конфигурационный файл сервиса по адресу: папка_сервиса/...
-~~~
-sudo systemctl restart mariadb
-sudo mysql_secure_installation
-mysql -u root -p
-mypassword
-CREATE DATABASE mynewdb;
-quit
-~~~
+Находится внутри контейнера, дополнительная конфигурация не требуется.
+
 ### Выполнение миграций
 
-Для заполнения базы данных системной информацией выполните в корневой папке сервиса: 
-~~~
-mysql -u root -p -f mynewdb < папка_сервиса/...
-mypassword
-~~~
-и согласитесь с запросом
+Данные будут подтянуты автоматически после запуска воркера и скрипта для сбора данных.
 
-### Установка зависимостей проекта
-
-Установка зависимостей осуществляется с помощью [Composer](http://getcomposer.org/). Если у вас его нет вы можете установить его по инструкции
-на [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
-
-После этого выполнить команду в директории проекта:
-
-~~~
-composer install
-~~~
 
 РАЗРАБОТЧИКИ
 
-<h4>Иванов Иван fullstack https://t.me/test@name1 </h4>
+<h4>Павел Емшанов python-dev middle https://t.me/PashaEmsh </h4>
+<h4>Никита Семаев python-dev middle https://t.me/s6a16ec </h4>
+<h4>Андрей Попов ML python https://t.me/kaino0 </h4>
+<h4>Даниил Дыряев ML master https://t.me/tolimanstar </h4>
+<h4>Виктор Шатилов fullstack middle https://t.me/wityat </h4>
 
+ML model:
 https://drive.google.com/file/d/1hX-8Ce4eL991_qMcP98ISrprPpIjplRS/view?usp=sharing
