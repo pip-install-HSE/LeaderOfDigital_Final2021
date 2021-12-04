@@ -11,3 +11,4 @@ celery
 tortoise-orm[asyncpg]
 python-decouple
 shapely
+geopandas
