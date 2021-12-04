@@ -6,6 +6,10 @@ import React from "react";
 import "./map.css";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
+// import 'mapboxgl'
+// import LngLat from "mapbox-gl/src/geo/lng_lat";
+// import LngLatBounds from "mapbox-gl/src/geo/lng_lat_bounds";
+import L from 'leaflet'
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -14,8 +18,25 @@ const Map = ReactMapboxGl({
 
 export default class MapDraw extends React.Component{
     state = {
-        station: undefined
+        station: undefined,
+        fitBounds: undefined
     }
+
+    // updateBounds(polygon){
+    //     // console.log({lng:polygon[0], lat:polygon[1]})
+    //     // let fit = new L.Polygon(polygon).
+    //     // let southWest = new LngLat(fit['_southWest']['lat'], fit['_southWest']['lng']);
+    //     // let northEast = new LngLat(fit['_northEast']['lat'], fit['_northEast']['lng']);
+    //     // let center = new LngLatBounds(southWest, northEast).getCenter();
+    //     // console.log(fit)
+    //     this.setState(
+    //         {
+    //             fitBounds: polygon
+    //         }
+    //     )
+    //
+    // }
+
 
     onDrawCreate = ({ features }) => {
         console.log(features);
@@ -26,10 +47,15 @@ export default class MapDraw extends React.Component{
     };
 
     fillOnClick = ({ features, lngLat }) => {
+        // this.setState(
+        //     {
+        //         fitBounds: lngLat
+        //     }
+        // )
         console.log({ lngLat, features });
         this.setState({station: {
                 name: features[0].properties.name,
-                position: [lngLat.lng, lngLat.lat]
+                position: [lngLat.lng, lngLat.lat],
         }})
 
     }
@@ -42,8 +68,11 @@ export default class MapDraw extends React.Component{
                         height: "600px",
                         width: "100%"
                     }}
-                    // center={[56, 46]}
-                    zoom={[4]}
+                    // center={[100, 61]}
+                    center={[76.672495, 61.460976]}
+                    zoom={[10]}
+                    fitBounds={this.state.fitBounds}
+
                 >
                     {this.state.station && (
                         <Popup coordinates={this.state.station.position} offset={{
@@ -88,7 +117,7 @@ export default class MapDraw extends React.Component{
                             line_string: true,
                             trash: true
                         }}
-                        defaultMode="draw_polygon"
+                        // defaultMode="draw_polygon"
                     />
                 </Map>
             </div>

@@ -52,6 +52,11 @@ export default class Home extends React.Component {
         this.setState({objectData: data})
     }
 
+    onChangeProgress = (progress) => {
+        // console.log(progress);
+        this.setState({progress: progress})
+    }
+
     setOilSpills = (tasks) => {
 
         if (tasks){
@@ -69,7 +74,7 @@ export default class Home extends React.Component {
             <Search onSearch={this.onSearch}/>
           {/*<Chart data={userData} title="Аналитика инцедентов" grid dataKey="Actve User"/>*/}
             <MapDraw geometryData={this.state.geometryData} tasksData={this.state.tasksGeometry}/>
-            <TwoDatePickers setOilSpills={this.setOilSpills} objects={this.state.objectData} progress={this.state.progress}/>
+            <TwoDatePickers setOilSpills={this.setOilSpills} objects={this.state.objectData} progress={this.state.progress} onChangeProgress={this.onChangeProgress}/>
             <LinearProgressWithLabel value={this.state.progress} />
             <ObjectList objectData={this.state.objectData} onChangeData={this.onChangeData}/>
           {/*<div className="homeWidgets">*/}

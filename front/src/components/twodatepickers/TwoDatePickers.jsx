@@ -1,14 +1,20 @@
 import TextField from "@mui/material/TextField";
 import React from "react";
 import './twodatepickers.css'
+import moment from "moment";
 
 export default class TwoDatePickers extends React.Component {
     state = {
         st_value: "2021-12-03T10:30",
-        end_value: "2021-12-03T10:30",
+        end_value: "2021-12-06T10:30",
         real_start_date: undefined,
         real_end_date: undefined,
+        notifySended: false
     }
+
+    progressStep = 0
+    progress = 0
+
 
     _handleSt = (e) => {
         this.setState({
@@ -22,7 +28,14 @@ export default class TwoDatePickers extends React.Component {
         })
     }
 
+    sendTelegramNotification(chat_id, text){
+        let botToken = "5032450393:AAGaDjw3zD4NRwePBJXHCYUT7nymADzVY5Q";
+        let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chat_id}&text=${text}`
+        fetch(url).then(r => r.json())
+    }
+
     makeRequest () {
+        this.changeDates()
         let os = []
         if (this.props.objects){
             os = this.props.objects
@@ -40,27 +53,81 @@ export default class TwoDatePickers extends React.Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    // console.log(result);
+                    console.log(result);
+                    if (result.features.length > 0 && !this.state.notifySended){
+                        this.setState({
+                            notifySended: true
+                        })
+                        this.sendTelegramNotification(446162145, "Новый нефтеразлив!!!")
+                    }
                     this.props.setOilSpills(result);
                 })
     }
 
-    onClick = () =>{
-        console.log(this.state.st_value)
-        this.interval = setInterval(() => this.makeRequest(), 5000);
+    setProgressStep(){
+        console.log(new Date(this.state.real_end_date) - new Date(this.state.real_start_date), new Date(this.state.real_end_date), new Date(this.state.real_start_date))
+        let a = moment(this.state.st_value,'YYYYMMDDTh:mm');
+        let b = moment(this.state.end_value,'YYYYMMDDTh:mm');
+        this.progressStep = 100/b.diff(a, 'days');
+        console.log(this.progressStep, new Date(this.state.end_value), new Date(this.state.st_value))
+    }
+
+    clear(){
+        clearInterval(this.interval);
+        this.setState({
+            st_value: this.state.real_start_date,
+            end_value: this.state.real_end_date,
+            real_start_date: undefined,
+            real_end_date: undefined,
+
+        });
+        this.progress = 0
+        this.props.onChangeProgress(this.progress)
+    }
+
+    changeDates(){
+        console.log(this.progressStep)
+        // this.setProgressStep()
+        // console.log(new Date(this.state.st_value), this.progress);
         if (!this.state.real_start_date && !this.state.real_end_date){
+            this.progress = 0
+            this.props.onChangeProgress(this.progress)
+            console.log(this.state)
+            this.setProgressStep()
             this.setState({
                 real_start_date: this.state.st_value,
-                real_end_date: this.state.end_value
+                real_end_date: this.state.end_value,
+                end_value: moment(addDays(new Date(this.state.st_value), 1)).format('YYYY-MM-DDTh:mm'),
             })
+
+        }else if (new Date(this.state.st_value) < new Date(this.state.real_end_date)){
+            let st_val = moment(addDays(new Date(this.state.st_value), 1)).format('YYYY-MM-DDTh:mm');
+            let end_val = moment(addDays(new Date(this.state.end_value), 1)).format('YYYY-MM-DDTh:mm');
+            if (new Date(st_val) >= new Date(this.state.real_end_date))
+            {
+                this.clear()
+                return
+            }
+            this.setState({
+                st_value: st_val,
+                end_value: end_val
+            })
+
+        } else{
+            this.clear()
+            return
         }
-        this.setState({
-            st_value: addDays(new Date(this.state.st_value))
-        })
+        this.progress = this.progress+this.progressStep
+        this.props.onChangeProgress(this.progress)
+
+
         function addDays(date, days) {
             return new Date(date.getTime() + days*24*60*60000);
         }
-        console.log(new Date(this.state.st_value));
+    }
+
+    onClick = () =>{
+        this.interval = setInterval(() => this.makeRequest(), 1000);
     }
     componentWillUnmount() {
         clearInterval(this.interval);
