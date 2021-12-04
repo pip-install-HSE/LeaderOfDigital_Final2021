@@ -1,0 +1,33 @@
+.twodatepickers {
+    margin: 20px;
+    display: flex;
+    -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+    justify-content:  flex-start;
+    align-items: center;
+}
+.startdatepicker{
+    margin: 10px;
+    padding: 10px 10px;
+}
+.enddatepicker{
+    margin: 10px;
+    padding: 10px 10px;
+}
+
+.submitTwoDatePickers{
+    border: none;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 10px 10px;
+    background-color: #3bb077;
+    color: white;
+    cursor: pointer;
+    /*margin-right: 20px;*/
+}
+/*.searchbar{*/
+/*    display:block;*/
+/*    width:100%; !*растягиваем тексовое поле на всю ширину родителя*!*/
+/*    border:none;*/
+/*    min-width:0;*/
+/*}*/

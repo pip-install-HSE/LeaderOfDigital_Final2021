@@ -1,0 +1,163 @@
+.object {
+  flex: 4;
+  padding: 20px;
+}
+
+.objectTitleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+
+.objectContainer {
+  display: flex;
+  margin-top: 20px;
+}
+
+.objectShow {
+  flex: 4;
+  padding: 0;
+    margin: 0;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+}
+
+.objectUpdate {
+    justify-content: space-between;
+    flex-direction: column;
+    /*height: 100vh;*/
+    display: flex;
+  flex: 1;
+  padding: 20px;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  /*margin-left: 20px;*/
+  /*  align-items: flex-end;*/
+    /*display: flex;*/
+    /*justify-content: space-between;*/
+}
+
+.objectShowTop {
+  display: flex;
+  align-items: center;
+}
+
+.objectShowImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.objectShowTopTitle {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.objectShowName {
+  font-weight: 600;
+}
+
+.objectShowBottom{
+    margin-top: 20px;
+}
+
+.objectShowTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(175, 170, 170);
+}
+
+.objectShowInfo{
+    display: flex;
+    align-items: center;
+    margin: 20px 0px;
+    color: #444;
+}
+
+.objectShowIcon{
+    font-size: 16px !important;
+}
+
+.objectShowInfoTitle{
+    margin-left: 10px;
+}
+
+.objectUpdateTitle{
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.objectUpdateForm{
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.objectUpdateItem{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.objectUpdateItem>label{
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.objectUpdateInput{
+    border: none;
+    width: 250px;
+    height: 30px;
+    border-bottom: 1px solid gray;
+}
+
+.objectUpdateUpload{
+    display: flex;
+    align-items: center;
+}
+
+.objectUpdateImg{
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.objectUpdateIcon{
+    cursor: pointer;
+}
+
+.objectUpdateButtonContainer{
+
+    justify-content: flex-end;
+    display: flex;
+}
+
+.objectUpdateButton{
+    width: 80px;
+    border: none;
+    padding: 5px;
+    background-color: darkblue;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    margin-right: 20px;
+}
+
+.objectAddButton {
+    width: 80px;
+    border: none;
+    padding: 5px;
+    background-color: teal;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+}
